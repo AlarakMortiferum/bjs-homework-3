@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Домашнее задание к лекции 2. «Функции»</title>
+    <link rel="icon" href="data:,">
+
+    <!-- Jasmine CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jasmine/3.1.0/jasmine.min.css">
+
+    <!-- Jasmine JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/3.1.0/jasmine.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/3.1.0/jasmine-html.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/3.1.0/boot.min.js"></script>
+
+    <!-- Ваш код с функциями -->
+    <script src="task.js"></script>
+</head>
+<body>
+<script>
+    describe("Домашнее задание к занятию 2 «Функции»", function() {
+
+      describe("Задача #1 Исследовать массив", function() {
+        it("[-99, 99, 10] => { min: -99, max: 99, avg: 3.33 }", function() {
+          expect(getArrayParams(-99, 99, 10)).toEqual({ min: -99, max: 99, avg: 3.33 });
+        });
+
+        it("[1, 2, 3, -100, 10] => { min: -100, max: 10, avg: -16.80 }", function() {
+          expect(getArrayParams(1, 2, 3, -100, 10)).toEqual({ min: -100, max: 10, avg: -16.80 });
+        });
+
+        it("[5] => { min: 5, max: 5, avg: 5 }", function() {
+          expect(getArrayParams(5)).toEqual({ min: 5, max: 5, avg: 5 });
+        });
+      });
+
+      describe("Задача #2 Насадки преобразователи", function() {
+
+        describe("Насадка суммирования элементов", function() {
+          it("[] => 0", function() {
+            expect(summElementsWorker()).toBe(0);
+          });
+
+          it("[10, 10, 11, 20, 10] => 61", function() {
+            expect(summElementsWorker(10, 10, 11, 20, 10)).toBe(61);
+          });
+
+          it("[0, 0, 0, -1, -100] => 0 - (-100) => 0", function() {
+            expect(summElementsWorker(0, 0, 0, -1, -100)).toBe(-101);
+          });
+        });
+
+        describe("Насадка вычисления разницы максимального и минимального элементов", function() {
+          it("[] => 0", function() {
+            expect(differenceMaxMinWorker()).toBe(0);
+          });
+
+          it("[10, 10, 11, 20, 10] => 20 - 10 => 10", function() {
+            expect(differenceMaxMinWorker(10, 10, 11, 20, 10)).toBe(10);
+          });
+
+          it("[0, 0, 0, -1, -100] => 0 - (-100) => 100", function() {
+            expect(differenceMaxMinWorker(0, 0, 0, -1, -100)).toBe(100);
+          });
+        });
+
+        describe("Насадка вычисления разницы сумм чётных и нечётных элементов", function() {
+          it("[] => 0", function() {
+            expect(differenceEvenOddWorker()).toBe(0);
+          });
+
+          it("[94, 51, 57, 41, 47, 66, 58, 10, 38, 17] => 266 - 213 => 53", function() {
+            expect(differenceEvenOddWorker(94, 51, 57, 41, 47, 66, 58, 10, 38, 17)).toBe(53);
+          });
+
+          it("[15, 97, 85, 64, 67, 10, 69, 40, 15, 35] => 114 - 383 => -269", function() {
+            expect(differenceEvenOddWorker(15, 97, 85, 64, 67, 10, 69, 40, 15, 35)).toBe(-269);
+          });
+        });
+
+        describe("Насадка вычисления среднего значения чётных элементов", function() {
+          it("[] => 0", function() {
+            expect(averageEvenElementsWorker()).toBe(0);
+          });
+
+          it("[1, 2, 3, 4, 5, 6, 7, 8, 9] => [2, 4, 6, 8] => 5", function() {
+            expect(averageEvenElementsWorker(1, 2, 3, 4, 5, 6, 7, 8, 9)).toBe(5);
+          });
+
+          it("[15, 97, 85, 64, 67, 10, 69, 40, 15, 35] => [64, 10, 40] => 38", function() {
+            expect(averageEvenElementsWorker(15, 97, 85, 64, 67, 10, 69, 40, 15, 35)).toBe(38);
+          });
+        });
+      });
+
+      describe("Задача #3 Агрегатор преобразователей", function() {
+        const arr = [[10, 10, 11, 20, 10], [67, 10, 2, 39, 88], [72, 75, 51, 87, 43], [30, 41, 55, 96, 62]];
+
+        describe("Насадка суммирования значений", function() {
+          it("Максимум из 61, 206, 328, 284 => 328", function() {
+            expect(makeWork(arr, summElementsWorker)).toBe(328);
+          });
+        });
+
+        describe("Насадка разницы элементов", function() {
+          it("Максимум из 10, 86, 44, 66 => 86", function() {
+            expect(makeWork(arr, differenceMaxMinWorker)).toBe(86);
+          });
+        });
+
+        describe("Насадка разницы чётных и нечётных элементов", function() {
+          it("Максимум из 39, -6, -184, 92 => 92", function() {
+            expect(makeWork(arr, differenceEvenOddWorker)).toBe(92);
+          });
+        });
+
+        describe("Насадка среднего значения чётных элементов", function() {
+          it("Максимум из 12.5, 33.333, 72, 62.666 => 72", function() {
+            expect(makeWork(arr, averageEvenElementsWorker)).toBe(72);
+          });
+        });
+      });
+    });
+</script>
+</body>
+</html>
